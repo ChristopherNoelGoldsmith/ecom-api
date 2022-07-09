@@ -25,7 +25,7 @@ const URI = process.env.DATABASE.replace(
 );
 console.log(process.env.PASSWORD);
 console.log(process.env.URI);
-console.log(process.end.DATABASE);
+console.log(process.env.DATABASE);
 // --express app initiation--
 const app = express();
 // --Used to connect mongoose to the NoSQL database--
