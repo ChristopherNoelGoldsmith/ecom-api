@@ -23,14 +23,11 @@ const URI = process.env.DATABASE.replace(
 	"%URI_PASSWORD%",
 	process.env.PASSWORD
 );
-console.log(process.env.PASSWORD);
-console.log(URI);
-console.log(process.env.DATABASE);
 // --express app initiation--
 const app = express();
 // --Used to connect mongoose to the NoSQL database--
 mongoose
-	.connect(process.env.URI, {
+	.connect(URI, {
 		useNewUrlParser: true,
 		useUnifiedTopology: true,
 	})
