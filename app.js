@@ -45,7 +45,12 @@ const limiter = rateLimit({
 	message: "YOU HAVE REACHED YOUR REQUEST LIMIT, PLEASE TRY AGAIN LATER!",
 });
 // SECURITY 1) HELMET
-app.use(helmet());
+//! CHECK CORP
+app.use(
+	helmet({
+		crossOriginResourcePolicy: false,
+	})
+);
 
 // SERVING STATIC FILES//
 app.use("/", express.static(path.join(__dirname, "static")));
