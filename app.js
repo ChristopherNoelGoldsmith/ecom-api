@@ -47,7 +47,7 @@ const limiter = rateLimit({
 });
 // SECURITY 1) HELMET & CORS
 app.use(cors());
-app.options();
+app.options("*", cors());
 
 app.use(helmet());
 
