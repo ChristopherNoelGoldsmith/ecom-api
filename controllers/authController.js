@@ -124,7 +124,7 @@ const protect = catchAsyncFunction(async (req, res, next) => {
 	//SECURITY 3 ) CHECKS IF USER STILL EXISTS
 	const { id } = verified;
 	const user = await User.findById(id);
-	console.log(user);
+	console.log(verified);
 	if (!user) return next(new AppError("THIS USER DOES NOT EXIST!", 401));
 
 	//SECURITY 4 ) CHECKS IF USER'S PASSWORD HAS BEEN CHANGED SINCE THE TOKEN WAS ISSUED
@@ -136,7 +136,8 @@ const protect = catchAsyncFunction(async (req, res, next) => {
 			new AppError("YOUR PASSWORD HAS CHANGED, PLEASE LOG BACK IN!", 401)
 		);
 	}
-
+	if (!checkIfPasswordChanged)
+		new AppError("THERE WAS AN ERROR WHEN TRYING TO CHANGE YOUR PASSWORD");
 	//ALL SAFETY CHECKS COMPLETED AT THIS POINT!
 	//MUTATION!
 	req.user = user;
