@@ -51,6 +51,7 @@ const loginUsers = catchAsyncFunction(async (req, res, next) => {
 	if (!user || (await user.correctPassword(password, user.password))) {
 		//PERSISTANCE 1 ) JWT CREATION FOR PERSISTANCE ------
 		console.log(user);
+		//NOTE: TOKEN IS FORMATTED AS A COOKIE!
 		const token = sign.signToken(user);
 
 		//PERSISTANCE 2 ) JWT TOKEN TO CLIENT ------
@@ -107,6 +108,7 @@ const updatePassword = catchAsyncFunction(async (req, res, next) => {
 //!!!!IMPORTANT THE req IS MUTATED IN THIS FUNCTION AND PASSED DOWN TO OTHER METHODS THROUGH THIS APP
 const protect = catchAsyncFunction(async (req, res, next) => {
 	let token;
+	console.log(req.headers);
 	//SECURITY 1-A ) CHECKS THE HEADER OF THE BEARER OF THE TOKEN
 	if (
 		req.headers.authorization &&

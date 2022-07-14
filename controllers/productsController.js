@@ -46,7 +46,6 @@ const getProducts = catchAsyncFunction(async (req, res, next) => {
 
 	// 1 ) Query Execution
 	//TODO: Lots of alliasing needs to be cleaned
-	console.log(query);
 	const { query: queryData, numberOfPages: pages } = query;
 	const data = await queryData;
 
