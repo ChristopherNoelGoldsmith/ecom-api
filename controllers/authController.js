@@ -108,7 +108,6 @@ const updatePassword = catchAsyncFunction(async (req, res, next) => {
 //!!!!IMPORTANT THE req IS MUTATED IN THIS FUNCTION AND PASSED DOWN TO OTHER METHODS THROUGH THIS APP
 const protect = catchAsyncFunction(async (req, res, next) => {
 	let token;
-	console.log(req.headers.authorization);
 	//SECURITY 1-A ) CHECKS THE HEADER OF THE BEARER OF THE TOKEN
 	if (
 		req.headers.authorization &&
@@ -117,14 +116,13 @@ const protect = catchAsyncFunction(async (req, res, next) => {
 		//SECURITY 1-B ) SPLITS THE "BEARER" STRING FROM THE TOKEN IN THE HEADER AND ASSIGNS IT TO THE TOKEN VARIABLE
 		token = req.headers.authorization.split(" ")[1];
 	}
-	console.log(token);
 	//SECURITY 1-C ) CHECKS FOR THE TOKEN
 	if (!token) return next(new AppError("YOU ARE NOT LOGGED IN!", 401));
-
+	console.log(token, "blooop");
 	//SECURITY 2 ) VERIFIES IF THE TOKEN IS VALID
 	//NOTE: Promisify node utility used to prevent a clog in the event loop
 	const verified = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
-
+	console.log(verified, 5000000);
 	//SECURITY 3 ) CHECKS IF USER STILL EXISTS
 	const { id } = verified;
 	const user = await User.findById(id);
