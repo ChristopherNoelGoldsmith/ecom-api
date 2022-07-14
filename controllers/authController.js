@@ -118,11 +118,9 @@ const protect = catchAsyncFunction(async (req, res, next) => {
 	}
 	//SECURITY 1-C ) CHECKS FOR THE TOKEN
 	if (!token) return next(new AppError("YOU ARE NOT LOGGED IN!", 401));
-	console.log(token, "blooop");
 	//SECURITY 2 ) VERIFIES IF THE TOKEN IS VALID
 	//NOTE: Promisify node utility used to prevent a clog in the event loop
 	const verified = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
-	console.log(verified, 5000000);
 	//SECURITY 3 ) CHECKS IF USER STILL EXISTS
 	const { id } = verified;
 	const user = await User.findById(id);
@@ -132,6 +130,7 @@ const protect = catchAsyncFunction(async (req, res, next) => {
 	//SECURITY 4 ) CHECKS IF USER'S PASSWORD HAS BEEN CHANGED SINCE THE TOKEN WAS ISSUED
 	// NOTE: If the below schema method returns true an error is thrown
 	const checkIfPasswordChanged = await user.changedPasswordAfter(verified.iat);
+	console.log(checkIfPasswordChanged);
 	if (checkIfPasswordChanged) {
 		return next(
 			new AppError("YOUR PASSWORD HAS CHANGED, PLEASE LOG BACK IN!", 401)
