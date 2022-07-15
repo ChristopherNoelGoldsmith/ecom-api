@@ -71,14 +71,16 @@ const updatePassword = catchAsyncFunction(async (req, res, next) => {
 	THE .save METHOD IS ALSO USED DUE TO THE MIDDLEWARE IN THE SCHEMA UPDATING PARTS OF THE USER
 	ON THE MUTATION OF THE PASSWORD.
 	*/
+	console.log("hello");
+	console.log(req.body);
 
 	const { _id: id } = req.user;
+
 	const {
 		password: oldPassword,
 		newPassword: password,
 		newPasswordConfirm,
 	} = req.body;
-	console.log(password, newPassword, newPasswordConfirm);
 	// VERIFICATION 1 ) CHECK TO MAKE SURE BOTH PASSWORD INPUTS WERE THE SAME
 	if (password !== newPasswordConfirm)
 		return next(new AppError("BOTH PASSWORD INPUTS MUST MATCH", 400));
