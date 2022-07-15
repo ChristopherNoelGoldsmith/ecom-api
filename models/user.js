@@ -96,6 +96,8 @@ UserSchema.methods.changedPasswordAfter = async function (jwtTimestamp) {
 			this.passwordChangedAt.getTime() / 1000,
 			10
 		);
+		console.log(jwtTimestamp, "inpassword changed 2");
+
 		return jwtTimestamp < changedTimeStamp;
 	}
 
