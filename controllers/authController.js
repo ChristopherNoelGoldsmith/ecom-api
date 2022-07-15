@@ -78,10 +78,11 @@ const updatePassword = catchAsyncFunction(async (req, res, next) => {
 		newPassword: password,
 		newPasswordConfirm,
 	} = req.body;
+	console.log(id);
 	// VERIFICATION 1 ) CHECK TO MAKE SURE BOTH PASSWORD INPUTS WERE THE SAME
 	if (password !== newPasswordConfirm)
 		return next(new AppError("BOTH PASSWORD INPUTS MUST MATCH", 400));
-
+	console.log("password worked");
 	// VERIFICATION 2 ) VERIFIES TOKEN THEN GETS USER FROM COLLECTION
 	const user = await User.findOne(id).select("+password");
 	console.log(user);
@@ -134,14 +135,12 @@ const protect = catchAsyncFunction(async (req, res, next) => {
 			new AppError("YOUR PASSWORD HAS CHANGED, PLEASE LOG BACK IN!", 401)
 		);
 	}
-	console.log(checkIfPasswordChanged);
 	////////////////////////////////
 	//! if (!checkIfPasswordChanged)
 	//! 	new AppError("THERE WAS AN ERROR WHEN TRYING TO CHANGE YOUR PASSWORD");
 	////////////////////////////////
 	//ALL SAFETY CHECKS COMPLETED AT THIS POINT!
 	//MUTATION!
-	console.log(user, "vagina lol");
 	req.user = user;
 	next();
 });
