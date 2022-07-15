@@ -86,10 +86,9 @@ const updatePassword = catchAsyncFunction(async (req, res, next) => {
 		return next(new AppError("BOTH PASSWORD INPUTS MUST MATCH", 400));
 	console.log("password worked");
 	console.log(id, "id");
-	console.log(user, "user");
 
 	// VERIFICATION 2 ) VERIFIES TOKEN THEN GETS USER FROM COLLECTION
-	const user = await User.findOne(id).select("+password");
+	const user = await User.findById(id).select("+password");)
 	if (!user) return next(new AppError("USER NOT FOUND!", 404));
 	// VERIFICATION 3 ) CHECK IF PASSWORD CORRECT
 	if (!(await user.correctPassword(oldPassword, user.password)))
