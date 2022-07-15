@@ -128,6 +128,7 @@ const protect = catchAsyncFunction(async (req, res, next) => {
 
 	//SECURITY 4 ) CHECKS IF USER'S PASSWORD HAS BEEN CHANGED SINCE THE TOKEN WAS ISSUED
 	// NOTE: If the below schema method returns true an error is thrown
+	console.log(verified.iat);
 	const checkIfPasswordChanged = await user.changedPasswordAfter(verified.iat);
 	console.log(checkIfPasswordChanged, "asshole");
 	if (checkIfPasswordChanged) {
