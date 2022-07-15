@@ -73,8 +73,8 @@ const updatePassword = catchAsyncFunction(async (req, res, next) => {
 	ON THE MUTATION OF THE PASSWORD.
 	*/
 
+	const { _id: id } = req.user;
 	const {
-		id,
 		password: oldPassword,
 		newPassword: password,
 		newPasswordConfirm,
@@ -110,6 +110,7 @@ const updatePassword = catchAsyncFunction(async (req, res, next) => {
 //!!!!IMPORTANT THE req IS MUTATED IN THIS FUNCTION AND PASSED DOWN TO OTHER METHODS THROUGH THIS APP
 const protect = catchAsyncFunction(async (req, res, next) => {
 	let token;
+	console.log(req.body);
 	//SECURITY 1-A ) CHECKS THE HEADER OF THE BEARER OF THE TOKEN
 	if (
 		req.headers.authorization &&
@@ -136,13 +137,15 @@ const protect = catchAsyncFunction(async (req, res, next) => {
 			new AppError("YOUR PASSWORD HAS CHANGED, PLEASE LOG BACK IN!", 401)
 		);
 	}
+	console.log(checkIfPasswordChanged);
 	////////////////////////////////
 	//! if (!checkIfPasswordChanged)
 	//! 	new AppError("THERE WAS AN ERROR WHEN TRYING TO CHANGE YOUR PASSWORD");
 	////////////////////////////////
 	//ALL SAFETY CHECKS COMPLETED AT THIS POINT!
 	//MUTATION!
-	req.body.id = id;
+	console.log(user, "vagina lol");
+	req.user = user;
 	next();
 });
 
