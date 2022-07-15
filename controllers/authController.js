@@ -50,7 +50,6 @@ const loginUsers = catchAsyncFunction(async (req, res, next) => {
 	//SECURITY 1-B ) BCRYPT PASSWORD VALIDATION ------
 	if (!user || (await user.correctPassword(password, user.password))) {
 		//PERSISTANCE 1 ) JWT CREATION FOR PERSISTANCE ------
-		console.log(user);
 		//NOTE: TOKEN IS FORMATTED AS A COOKIE!
 		const token = sign.signToken(user);
 
@@ -79,7 +78,6 @@ const updatePassword = catchAsyncFunction(async (req, res, next) => {
 		newPassword: password,
 		newPasswordConfirm,
 	} = req.body;
-	console.log(req.body, id, "poop");
 	// VERIFICATION 1 ) CHECK TO MAKE SURE BOTH PASSWORD INPUTS WERE THE SAME
 	if (password !== newPasswordConfirm)
 		return next(new AppError("BOTH PASSWORD INPUTS MUST MATCH", 400));
@@ -110,7 +108,6 @@ const updatePassword = catchAsyncFunction(async (req, res, next) => {
 //!!!!IMPORTANT THE req IS MUTATED IN THIS FUNCTION AND PASSED DOWN TO OTHER METHODS THROUGH THIS APP
 const protect = catchAsyncFunction(async (req, res, next) => {
 	let token;
-	console.log(req.body);
 	//SECURITY 1-A ) CHECKS THE HEADER OF THE BEARER OF THE TOKEN
 	if (
 		req.headers.authorization &&
