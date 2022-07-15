@@ -73,8 +73,8 @@ const updatePassword = catchAsyncFunction(async (req, res, next) => {
 	ON THE MUTATION OF THE PASSWORD.
 	*/
 
+	const { _id: id } = req.user;
 	const {
-		id,
 		password: oldPassword,
 		newPassword: password,
 		newPasswordConfirm,
@@ -136,14 +136,12 @@ const protect = catchAsyncFunction(async (req, res, next) => {
 			new AppError("YOUR PASSWORD HAS CHANGED, PLEASE LOG BACK IN!", 401)
 		);
 	}
-	console.log(checkIfPasswordChanged);
 	////////////////////////////////
 	//! if (!checkIfPasswordChanged)
 	//! 	new AppError("THERE WAS AN ERROR WHEN TRYING TO CHANGE YOUR PASSWORD");
 	////////////////////////////////
 	//ALL SAFETY CHECKS COMPLETED AT THIS POINT!
 	//MUTATION!
-	console.log(user, "vagina lol");
 	req.user = user;
 	next();
 });
