@@ -143,6 +143,7 @@ const protect = catchAsyncFunction(async (req, res, next) => {
 	////////////////////////////////
 	//ALL SAFETY CHECKS COMPLETED AT THIS POINT!
 	//MUTATION!
+	console.log(user, "vagina lol");
 	req.user = user;
 	next();
 });
