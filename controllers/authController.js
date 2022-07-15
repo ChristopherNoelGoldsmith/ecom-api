@@ -111,6 +111,7 @@ const updatePassword = catchAsyncFunction(async (req, res, next) => {
 //!!!!IMPORTANT THE req IS MUTATED IN THIS FUNCTION AND PASSED DOWN TO OTHER METHODS THROUGH THIS APP
 const protect = catchAsyncFunction(async (req, res, next) => {
 	let token;
+	console.log(req.body);
 	//SECURITY 1-A ) CHECKS THE HEADER OF THE BEARER OF THE TOKEN
 	if (
 		req.headers.authorization &&
