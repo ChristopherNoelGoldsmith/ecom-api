@@ -78,7 +78,7 @@ const updatePassword = catchAsyncFunction(async (req, res, next) => {
 		newPassword: password,
 		newPasswordConfirm,
 	} = req.body;
-	console.log(id);
+	console.log(password, newPassword, newPasswordConfirm);
 	// VERIFICATION 1 ) CHECK TO MAKE SURE BOTH PASSWORD INPUTS WERE THE SAME
 	if (password !== newPasswordConfirm)
 		return next(new AppError("BOTH PASSWORD INPUTS MUST MATCH", 400));
