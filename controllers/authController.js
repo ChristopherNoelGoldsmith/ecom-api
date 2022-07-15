@@ -84,8 +84,6 @@ const updatePassword = catchAsyncFunction(async (req, res, next) => {
 	// VERIFICATION 1 ) CHECK TO MAKE SURE BOTH PASSWORD INPUTS WERE THE SAME
 	if (password !== newPasswordConfirm)
 		return next(new AppError("BOTH PASSWORD INPUTS MUST MATCH", 400));
-	console.log("password worked");
-	console.log(id, "id");
 
 	// VERIFICATION 2 ) VERIFIES TOKEN THEN GETS USER FROM COLLECTION
 	const user = await User.findById(id).select("+password");
