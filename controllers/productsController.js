@@ -3,14 +3,55 @@ const APIFeatures = require("../utilities/utilities");
 const dotenv = require("dotenv");
 const fs = require("fs");
 dotenv.config({ path: `${__dirname}../config.env` });
-
+const multer = require("multer");
+const sharp = require("sharp");
 //status messages and error hanlding
-const statusMessages = require("../status");
 const catchAsyncFunction = require("../utilities/catchAsync");
 const AppError = require("../utilities/appError");
 //
 const JWT_SECRET = process.env.JWT_SECRET;
-const { status } = statusMessages();
+
+/*
+///////////
+MIDDLEWARE
+
+? Multer Documentation: https://www.npmjs.com/package/multer
+
+///////////
+*/
+
+const multerStorage = multer.memoryStorage();
+
+//NOTE: TEST TO SEE IF THE UPLOADED FILE IS AN IMAGE
+const multerFilter = (req, file, cb) => {
+	if (file.mimetype.startsWith("image")) return cb(null, file);
+
+	cb(new AppError("THE UPLOADED FILE MUST BE AN IMAGE!", 400), false);
+};
+
+//NOTE: FUNCTIONS TO EXPORT
+const upload = multer({ storage: multerStorage, fileFilter: multerFilter });
+
+const resizePhoto = (req, res, next) => {
+	if (!req.file) return next();
+
+	const imageStorageDestination = "public/img/products";
+	//! CHECK MIDDLEWARE MAY NOT BE FUNCTIONAL!
+	req.file.filename = `product-${req.user.id}.${Date.now()}-${extension}`;
+
+	//FILE HANDLING 1 ) STORE FILE IN MEMORY AND RESIZE (NOT STORAGE)
+	// ? SHARP Documentation https://www.npmjs.com/package/sharp
+	sharp(req.file.buffer)
+		.resize(500, 500)
+		.toFormat("jpeg")
+		.jpeg({ quality: 90 })
+		.toFile(`${imageStorageDestination}${req.file.filename}`);
+
+	next();
+};
+
+const uploadProductPhoto = upload.single("photo");
+///////////////////////////////////////////////////////
 
 //Adding products to the store
 const createProducts = catchAsyncFunction(async (req, res) => {
@@ -63,6 +104,7 @@ const getProducts = catchAsyncFunction(async (req, res, next) => {
 });
 
 const patchProducts = catchAsyncFunction(async (req, res, next) => {
+	console.log(req.file);
 	const product = await Product.findByIdAndUpdate(req.params.id, req.body, {
 		new: true,
 		runValidators: true,
@@ -148,8 +190,10 @@ const model = {
 	deleteProducts,
 	getPriceAverage,
 	categorySelect,
+	uploadProductPhoto,
 	massPopulateDev,
 	setExtensionsDev,
+	resizePhoto,
 };
 
 module.exports = model;

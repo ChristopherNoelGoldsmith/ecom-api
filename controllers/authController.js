@@ -84,7 +84,6 @@ const updatePassword = catchAsyncFunction(async (req, res, next) => {
 	// VERIFICATION 1 ) CHECK TO MAKE SURE BOTH PASSWORD INPUTS WERE THE SAME
 	if (password !== newPasswordConfirm)
 		return next(new AppError("BOTH PASSWORD INPUTS MUST MATCH", 400));
-
 	// VERIFICATION 2 ) VERIFIES TOKEN THEN GETS USER FROM COLLECTION
 	const user = await User.findById(id).select("+password");
 	if (!user) return next(new AppError("USER NOT FOUND!", 404));
@@ -110,7 +109,6 @@ const updatePassword = catchAsyncFunction(async (req, res, next) => {
 //!!!!IMPORTANT THE req IS MUTATED IN THIS FUNCTION AND PASSED DOWN TO OTHER METHODS THROUGH THIS APP
 const protect = catchAsyncFunction(async (req, res, next) => {
 	let token;
-	console.log(req.body);
 	//SECURITY 1-A ) CHECKS THE HEADER OF THE BEARER OF THE TOKEN
 	if (
 		req.headers.authorization &&
@@ -143,6 +141,7 @@ const protect = catchAsyncFunction(async (req, res, next) => {
 	////////////////////////////////
 	//ALL SAFETY CHECKS COMPLETED AT THIS POINT!
 	//MUTATION!
+	console.log("poop");
 	req.user = user;
 	next();
 });
