@@ -1,5 +1,5 @@
 const express = require("express");
-const stripe = equire("../controllers/stripe");
+const stripe = require("../controllers/stripe");
 const router = express.Router();
 const authController = require("../controllers/authController");
 const usersController = require("../controllers/usersController");
@@ -23,7 +23,7 @@ FOR MANAGING THE USERS CART
 router
 	.route("/cart")
 	.get(authController.protect)
-	.post(authController.protect, stripe.checkout)
+	.post(authController.protect)
 	.patch(authController.protect, usersController.updateCart)
 	.delete(authController.protect, usersController.clearCart);
 

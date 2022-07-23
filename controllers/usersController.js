@@ -6,6 +6,7 @@ const jwt = require("jsonwebtoken");
 const sendEmail = require("./email");
 const crypto = require("crypto");
 const sign = require("../utilities/signToken");
+const stripeController = require("./stripe");
 //status messages and error handling
 const catchAsyncFunction = require("../utilities/catchAsync");
 
@@ -170,9 +171,13 @@ const updateCart = catchAsyncFunction(async (req, res, next) => {
 	if (cart.length < 1) return new AppError("YOUR CART MUST HAVE ITEMS!", 400);
 
 	//CART 1 ) ADDS THE CURRENT ITEMS IN THE CART TO THE CART PROPERTY ON THE USER
-	const user = await User.findByIdAndUpdate(id, { cart: cart });
+	const user = await User.findByIdAndUpdate(id, { cart: cart }).populate(
+		"cart"
+	);
 
 	if (!user) new AppError("UNABLE TO ADD ITEMS TO CART", 400);
+
+	stripeController.checkoutSession(user.cart);
 
 	res.status(200).json({ status: "SUCCESS", data: user.cart });
 });
