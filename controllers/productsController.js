@@ -60,7 +60,7 @@ const createProducts = catchAsyncFunction(async (req, res) => {
 	Extenstion refers to the category of the item
 	*/
 	const product = await Product.create(req.body);
-	res.json({ status: status.success, data: product });
+	res.json({ status: "SUCCESS", data: product });
 });
 ///////////////////////
 /*GET PRODUCTS ALIAS */
@@ -98,9 +98,7 @@ const getProducts = catchAsyncFunction(async (req, res, next) => {
 	}
 
 	// 2 ) Data Response
-	return res
-		.status(200)
-		.json({ status: status.success, data: data, pages: pages });
+	return res.status(200).json({ status: "SUCCESS", data: data, pages: pages });
 });
 
 const patchProducts = catchAsyncFunction(async (req, res, next) => {
@@ -109,13 +107,13 @@ const patchProducts = catchAsyncFunction(async (req, res, next) => {
 		new: true,
 		runValidators: true,
 	});
-	res.status(200).json({ status: status.success, data: product });
+	res.status(200).json({ status: "STATUS", data: product });
 });
 
 const deleteProducts = catchAsyncFunction(async (req, res, next) => {
 	await Product.findByIdAndDelete(req.params.id);
 	res.status(200).json({
-		status: status.success,
+		status: "SUCCESS",
 		data: null,
 	});
 });
@@ -180,7 +178,7 @@ const getPriceAverage = catchAsyncFunction(async (req, res, next) => {
 			},
 		},
 	]);
-	res.status(200).json({ message: status.success, data: stats });
+	res.status(200).json({ message: "SUCCESS", data: stats });
 });
 
 const model = {

@@ -66,12 +66,11 @@ exports.checkoutSession = catchAsyncFunction(
 			return new AppError("AN ERROR HAS OCCOURED WITH STRIPE", 500);
 		console.log(lineItems);
 		//STRIPE 2 ) CREATES CHECOUT SESSION THE REDIRECTS THE USER TO THE PROPER URL
-		const checkout = stripe.checkout.sessions.create({
+		stripe.checkout.sessions.create({
 			line_items: lineItems,
 			mode: mode,
 			success_url: "https://youtube.com",
 			cancel_url: "https://youtube.com",
 		});
-		console.log("dookie");
 	}
 );
