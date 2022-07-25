@@ -167,17 +167,25 @@ USER CART FUNCTIONS
 // });
 
 const updateCart = catchAsyncFunction(async (req, res, next) => {
-	const { id, cart } = req.body;
+	const { cart } = req.body;
+	const { id } = req.user;
 	if (cart.length < 1) return new AppError("YOUR CART MUST HAVE ITEMS!", 400);
-
 	//CART 1 ) ADDS THE CURRENT ITEMS IN THE CART TO THE CART PROPERTY ON THE USER
-	const user = await User.findByIdAndUpdate(id, { cart: cart }).populate(
-		"cart"
-	);
+	const cartContents = cart.map((item) => {
+		return { product: item.id, quantity: item.count * 1 };
+	});
+	const user = await User.findByIdAndUpdate(id, {
+		cart: cartContents,
+	});
 
 	if (!user) new AppError("UNABLE TO ADD ITEMS TO CART", 400);
 
-	stripeController.checkoutSession(user.cart);
+	const url = {
+		success_url: `${req.protocol}//${req.get("host")}/`,
+		cancel_url: `${req.protocol}//${req.get("host")}/`,
+	};
+	stripeController.createItem();
+	stripeController.checkoutSession(user.cart, url);
 
 	res.status(200).json({ status: "SUCCESS", data: user.cart });
 });

@@ -45,32 +45,42 @@ URL = OBJECT WITH ENPOINTS AFTER THE SESSION IS COMPETED
 */
 
 exports.checkoutSession = catchAsyncFunction(
-	async (cart, mode = "payment", url) => {
-		//STRIPE 1 ) FORMATS THE ITEMS IN THE CART TO FIT THE CHECKOUT SESSION
-		const promisedLineItems = cart.map(async (product, index) => {
-			const { id, count } = product;
-			console.log(id);
+	async (cart, url, mode = "payment") => {
+		//STRIPE 1 ) FORMATS THE ITEMS IN THE CART TO FIT THE CHECKOUT SESSION.
+		const promisedLineItems = cart.map(async (products) => {
+			const { quantity, product } = products;
 			const prices = await stripe.prices.list({
-				product: id,
+				product: product,
 				active: true,
 			});
 			const [priceData] = prices.data;
 			return {
 				price: priceData.id,
-				quantity: count || 1,
+				quantity: quantity || 1,
 				//currency: priceData.currency,
 			};
 		});
 		const lineItems = await Promise.all(promisedLineItems);
 		if (!lineItems)
 			return new AppError("AN ERROR HAS OCCOURED WITH STRIPE", 500);
-		console.log(lineItems);
 		//STRIPE 2 ) CREATES CHECOUT SESSION THE REDIRECTS THE USER TO THE PROPER URL
-		stripe.checkout.sessions.create({
+		const checkoutSession = await stripe.checkout.sessions.create({
 			line_items: lineItems,
+			payment_method_types: ["card"],
 			mode: mode,
-			success_url: "https://youtube.com",
-			cancel_url: "https://youtube.com",
+			success_url: "https://youtube.com" || url.success_url,
+			cancel_url: "https://youtube.com" || url.cancel_url,
+			//customer_email: req.user.email,
+			//TODO: params below
+			//client_reference_id: req.body.cart,
 		});
+
+		console.log(checkoutSession.id);
+
+		//STRIPE 3 ) REDIRECT TO CHECKOUT
+		//TODO: INTEGRATE THE BELOW CODE TO THE FRONTEND TO BE CALLED TO REDIRECT THE USER TO A COMPLETED CHECOUT SESSION
+		// await stripe.redirectToCheckout({
+		// 	sessionId: checkoutSession.id,
+		// });
 	}
 );
