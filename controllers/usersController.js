@@ -181,13 +181,16 @@ const updateCart = catchAsyncFunction(async (req, res, next) => {
 	if (!user) new AppError("UNABLE TO ADD ITEMS TO CART", 400);
 
 	const url = {
-		success_url: `${req.protocol}//${req.get("host")}/`,
-		cancel_url: `${req.protocol}//${req.get("host")}/`,
+		success_url: `http://localhost:3000/category`,
+		cancel_url: `http://localhost:3000/category`,
 	};
-	stripeController.createItem();
-	stripeController.checkoutSession(user.cart, url);
-
-	res.status(200).json({ status: "SUCCESS", data: user.cart });
+	//await stripeController.createItem();
+	const checkoutSession = await stripeController.checkoutSession(
+		user.cart,
+		url
+	);
+	console.log(checkoutSession);
+	res.status(200).json({ status: "SUCCESS", data: checkoutSession });
 });
 
 const clearCart = catchAsyncFunction(async (req, res, next) => {
