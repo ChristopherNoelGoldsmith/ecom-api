@@ -194,12 +194,12 @@ const updateCart = catchAsyncFunction(async (req, res, next) => {
 });
 
 const clearCart = catchAsyncFunction(async (req, res, next) => {
-	const { id } = req.body;
+	const { id } = req.user;
 
 	//IDENTIFY 1 ) IDENTIFIES USER IN DATABASE
 	const user = await User.findById(id);
-
 	//CLEAR CART 1 ) SETS CART TO EMPTY ARRAY WITH .save METHOD
+	//TODO create dummy object to handle blank cart;
 	user.cart = [];
 	await user.save({ validateBeforeSave: false });
 

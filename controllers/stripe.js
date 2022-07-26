@@ -2,6 +2,7 @@ const dotenv = require("dotenv");
 const stripe = require("stripe")(process.env.STRIPE_API_KEY);
 const catchAsyncFunction = require("../utilities/catchAsync");
 const AppError = require("../utilities/appError");
+const Product = require("../models/product");
 
 //
 // ? https://stripe.com/docs/payments/accept-a-payment?platform=web&ui=checkout#create-product-prices-upfront
@@ -72,11 +73,47 @@ exports.checkoutSession = async (cart, url, mode = "payment") => {
 		//TODO: params below
 		//client_reference_id: req.body.cart,
 	});
-	console.log("poop");
-	console.log(lineItems);
-	console.log(checkoutSession.id);
 	return checkoutSession.id;
 
 	//STRIPE 3 ) REDIRECT TO CHECKOUT
 	//TODO: INTEGRATE THE BELOW CODE TO THE FRONTEND TO BE CALLED TO REDIRECT THE USER TO A COMPLETED CHECOUT SESSION
+};
+
+////////////////////////////////////////////////////////////////////////////////////////////
+//!DEVELOPEMENT FUNCTIONS
+exports.devCreateItems = async (req, res, next, currency = "usd") => {
+	const items = await Product.find();
+	console.log(items);
+
+	//STRIPE 1 ) CREATE PRODUCT IN STRIPE
+	const addProductToStripe = async (product, index) => {
+		try {
+			// await stripe.products.create({
+			// 	id: product.id,
+			// 	name: product.name,
+			// });
+
+			await stripe.prices.create({
+				product: product.id,
+				unit_amount: product.price,
+				currency: currency,
+			});
+		} catch (err) {
+			console.log(err);
+		}
+
+		return console.log("success", index);
+	};
+
+	items.forEach(async (item, index) => {
+		setTimeout(async () => {
+			await addProductToStripe(item, index);
+
+			return;
+		}, 1000 * index);
+		return;
+	});
+
+	console.log("poop2");
+	res.json({ status: "SUCCESS", message: "ITEMS ADDED TO STRIPE!" });
 };
