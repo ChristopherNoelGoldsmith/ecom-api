@@ -48,12 +48,19 @@ URL = OBJECT WITH ENPOINTS AFTER THE SESSION IS COMPETED
 exports.checkoutSession = async (cart, url, mode = "payment") => {
 	//STRIPE 1 ) FORMATS THE ITEMS IN THE CART TO FIT THE CHECKOUT SESSION.
 	const promisedLineItems = cart.map(async (products) => {
+		// DESTRUCTURE 1 ) SEPERATES THE QUANTITY AND PRODUCT OBEJCT FROM THE PASSED OBJECT
+
 		const { quantity, product } = products;
+
 		const prices = await stripe.prices.list({
-			product: product,
+			product: product.id,
 			active: true,
+			limit: 1,
 		});
+
+		// DESTRUCTURE 2 ) 'prices.data' IS AN ARRAY WITH A SINGLE VALUE SO IT IS DESTRUCTURED LIKE THIS FOR ACCESS
 		const [priceData] = prices.data;
+
 		return {
 			price: priceData.id,
 			quantity: quantity || 1,
@@ -61,6 +68,7 @@ exports.checkoutSession = async (cart, url, mode = "payment") => {
 		};
 	});
 	const lineItems = await Promise.all(promisedLineItems);
+	console.log(lineItems);
 	if (!lineItems) return new AppError("AN ERROR HAS OCCOURED WITH STRIPE", 500);
 	//STRIPE 2 ) CREATES CHECOUT SESSION THE REDIRECTS THE USER TO THE PROPER URL
 	const checkoutSession = await stripe.checkout.sessions.create({
@@ -73,6 +81,8 @@ exports.checkoutSession = async (cart, url, mode = "payment") => {
 		//TODO: params below
 		//client_reference_id: req.body.cart,
 	});
+	console.log(lineItems);
+	//console.log(checkoutSession);
 	return checkoutSession.id;
 
 	//STRIPE 3 ) REDIRECT TO CHECKOUT

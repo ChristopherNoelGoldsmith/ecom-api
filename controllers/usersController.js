@@ -176,20 +176,18 @@ const updateCart = catchAsyncFunction(async (req, res, next) => {
 	});
 	const user = await User.findByIdAndUpdate(id, {
 		cart: cartContents,
-	});
-
+	}).populate("cart.product");
 	if (!user) new AppError("UNABLE TO ADD ITEMS TO CART", 400);
 
 	const url = {
 		success_url: `http://localhost:3000/category`,
 		cancel_url: `http://localhost:3000/category`,
 	};
-	//await stripeController.createItem();
 	const checkoutSession = await stripeController.checkoutSession(
 		user.cart,
 		url
 	);
-	console.log(checkoutSession);
+	console.log(checkoutSession, "faggot");
 	res.status(200).json({ status: "SUCCESS", data: checkoutSession });
 });
 
