@@ -167,6 +167,7 @@ USER CART FUNCTIONS
 // });
 
 const updateCart = catchAsyncFunction(async (req, res, next) => {
+	console.log("poop");
 	const { cart } = req.body;
 	const { id } = req.user;
 	if (cart.length < 1) return new AppError("YOUR CART MUST HAVE ITEMS!", 400);
