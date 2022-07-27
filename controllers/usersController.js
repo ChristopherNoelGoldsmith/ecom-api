@@ -181,8 +181,8 @@ const updateCart = catchAsyncFunction(async (req, res, next) => {
 	console.log("poop");
 
 	const url = {
-		success_url: `http://localhost:3000/category`,
-		cancel_url: `http://localhost:3000/category`,
+		success_url: `https://allmightyccg.netlify.app/`,
+		cancel_url: `https://allmightyccg.netlify.app/`,
 	};
 	const checkoutSession = await stripeController.checkoutSession(
 		user.cart,
