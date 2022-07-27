@@ -37,7 +37,7 @@ const registerUsers = catchAsyncFunction(async (req, res, next) => {
 //LOGIN!
 const loginUsers = catchAsyncFunction(async (req, res, next) => {
 	const { username, password, email } = req.body;
-
+	console.log(req.body);
 	//INPUT CONFIRMATION 1 )
 	if ((!username && !email) || !password)
 		return next(new AppError("ERROR: PLEASE FILL ALL FIELDS", 400));
