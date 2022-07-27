@@ -48,7 +48,6 @@ URL = OBJECT WITH ENPOINTS AFTER THE SESSION IS COMPETED
 exports.checkoutSession = async (cart, url, mode = "payment") => {
 	//STRIPE 1 ) FORMATS THE ITEMS IN THE CART TO FIT THE CHECKOUT SESSION.
 	console.log("poop");
-	console.log(cart);
 
 	const promisedLineItems = cart.map(async (products) => {
 		// DESTRUCTURE 1 ) SEPERATES THE QUANTITY AND PRODUCT OBEJCT FROM THE PASSED OBJECT
@@ -63,7 +62,7 @@ exports.checkoutSession = async (cart, url, mode = "payment") => {
 
 		// DESTRUCTURE 2 ) 'prices.data' IS AN ARRAY WITH A SINGLE VALUE SO IT IS DESTRUCTURED LIKE THIS FOR ACCESS
 		const [priceData] = prices.data;
-
+		console.log(priceData);
 		return {
 			price: priceData.id,
 			quantity: quantity || 1,
