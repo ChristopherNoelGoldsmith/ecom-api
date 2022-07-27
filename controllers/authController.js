@@ -71,9 +71,9 @@ const updatePassword = catchAsyncFunction(async (req, res, next) => {
 	THE .save METHOD IS ALSO USED DUE TO THE MIDDLEWARE IN THE SCHEMA UPDATING PARTS OF THE USER
 	ON THE MUTATION OF THE PASSWORD.
 	*/
+	console.log("authorized");
 
 	const { id } = req.user;
-	console.log("authorized");
 	const {
 		password: oldPassword,
 		newPassword: password,
