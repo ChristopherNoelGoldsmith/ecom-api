@@ -170,6 +170,7 @@ const updateCart = catchAsyncFunction(async (req, res, next) => {
 	console.log("merit");
 	const { cart } = req.body;
 	const { id } = req.user;
+	console.log(cart);
 	if (cart.length < 1) return new AppError("YOUR CART MUST HAVE ITEMS!", 400);
 	//CART 1 ) ADDS THE CURRENT ITEMS IN THE CART TO THE CART PROPERTY ON THE USER
 	const cartContents = cart.map((item) => {
