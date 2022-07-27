@@ -61,7 +61,7 @@ exports.checkoutSession = async (cart, url, mode = "payment") => {
 				active: true,
 				limit: 1,
 			})
-			.catch((err) => console.log(err));
+			.catch((err) => console.log(err.message));
 
 		// DESTRUCTURE 2 ) 'prices.data' IS AN ARRAY WITH A SINGLE VALUE SO IT IS DESTRUCTURED LIKE THIS FOR ACCESS
 		const [priceData] = prices.data;
