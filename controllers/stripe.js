@@ -53,7 +53,7 @@ exports.checkoutSession = async (cart, url, mode = "payment") => {
 		// DESTRUCTURE 1 ) SEPERATES THE QUANTITY AND PRODUCT OBEJCT FROM THE PASSED OBJECT
 
 		const { quantity, product } = products;
-
+		console.log(products);
 		const prices = await stripe.prices.list({
 			product: product.id,
 			active: true,
@@ -62,7 +62,6 @@ exports.checkoutSession = async (cart, url, mode = "payment") => {
 
 		// DESTRUCTURE 2 ) 'prices.data' IS AN ARRAY WITH A SINGLE VALUE SO IT IS DESTRUCTURED LIKE THIS FOR ACCESS
 		const [priceData] = prices.data;
-		console.log(priceData);
 		return {
 			price: priceData.id,
 			quantity: quantity || 1,
